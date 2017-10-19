@@ -32,24 +32,22 @@ class TransYmlRouteLoader extends YamlFileLoader
     private $allowedLocales;
 
     /**
-     * @internal If this variable is not null, only routes for this locale will be imported.
-     *
-     * @var string|null
+     * @internal
      */
-    private $_currentImportLocale;
+    private $_importLocales = [];
+
 
     /**
      * Creates a new CustomRouteLoader instance.
      *
      * @param FileLocatorInterface $locator
-     * @param array                $allowedLocales
+     * @param array $allowedLocales
      */
     public function __construct(FileLocatorInterface $locator, array $allowedLocales)
     {
         parent::__construct($locator);
 
-        $this->allowedLocales       = $allowedLocales;
-        $this->_currentImportLocale = null;
+        $this->allowedLocales = $allowedLocales;
     }
 
     /**
@@ -73,7 +71,7 @@ class TransYmlRouteLoader extends YamlFileLoader
         $requirements = $config['requirements'] ?? [];
         $path         = $config['path'];
 
-        foreach($this->getSuitableLocales() as $locale) {
+        foreach ($this->getSuitableLocales() as $locale) {
             $config['defaults']     = $this->getLocaleConfigValue($locale, 'defaults', $defaults);
             $config['requirements'] = $this->getLocaleConfigValue($locale, 'requirements', $requirements);
             $config['path']         = $this->getLocaleConfigValue($locale, 'path', $path);
@@ -93,27 +91,43 @@ class TransYmlRouteLoader extends YamlFileLoader
         $requirements = $config['requirements'] ?? [];
         $prefix       = $config['prefix'];
 
-        foreach($this->getSuitableLocales() as $locale) {
+        foreach ($this->getSuitableLocales() as $locale) {
             $config['defaults']     = $this->getLocaleConfigValue($locale, 'defaults', $defaults);
             $config['requirements'] = $this->getLocaleConfigValue($locale, 'requirements', $requirements);
             $config['prefix']       = $this->getLocaleConfigValue($locale, 'prefix', $prefix);
 
-            $this->_currentImportLocale = $locale;
+            $this->pushImportLocale($locale);
             parent::parseImport($collection, $config, $path, $file);
-            $this->_currentImportLocale = null;
+            $this->popImportLocale();
         }
+    }
+
+    protected function pushImportLocale($locale)
+    {
+        array_push($this->_importLocales, $locale);
+    }
+
+    protected function popImportLocale()
+    {
+        array_pop($this->_importLocales);
+    }
+
+    protected function getCurrentImportLocale()
+    {
+        return count($this->_importLocales) > 0 ? array_slice($this->_importLocales, -1)[0] : null;
     }
 
     protected function getSuitableLocales()
     {
-        return $this->_currentImportLocale ? [$this->_currentImportLocale] : $this->allowedLocales;
+        $currentLocale = $this->getCurrentImportLocale();
+        return $currentLocale ? [$currentLocale] : $this->allowedLocales;
     }
 
     /**
      * Returns the locale-based value of a config field.
      *
-     * @param string       $locale
-     * @param string       $configKey
+     * @param string $locale
+     * @param string $configKey
      * @param array|string $configValue
      *
      * @return string
@@ -126,8 +140,8 @@ class TransYmlRouteLoader extends YamlFileLoader
         $isStringTransConfig = $isStringConfig && is_array($configValue);
         $isArrayTransConfig  = $isArrayConfig && count($configValue) > 0 && is_array(array_values($configValue)[0]);
 
-        if($isStringTransConfig || $isArrayTransConfig) {
-            if(!array_key_exists($locale, $configValue)) {
+        if ($isStringTransConfig || $isArrayTransConfig) {
+            if (!array_key_exists($locale, $configValue)) {
                 throw new \RuntimeException("Missing '$locale' locale in the '$configKey' route config.");
             }
 

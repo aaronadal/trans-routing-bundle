@@ -1,0 +1,12 @@
+import:
+    resource: route-one-import.yml
+    prefix:
+      en: /import
+      es: /importar
+      fr: /importer
+    requirements:
+      en: []
+      es: []
+      fr:
+        three: trois
+    type:     trans

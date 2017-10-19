@@ -3,4 +3,3 @@ route_trans:
     en: /foo
     es: /bar
     fr: /baz
-  defaults: { one: one }

@@ -1,0 +1,4 @@
+route_native:
+  path: /foo
+  requirements:
+    one: one

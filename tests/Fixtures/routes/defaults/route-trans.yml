@@ -1,0 +1,9 @@
+route_trans:
+  path: /bar
+  defaults:
+    en:
+      one: one
+    es:
+      one: uno
+    fr:
+      one: un

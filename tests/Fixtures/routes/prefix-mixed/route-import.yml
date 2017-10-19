@@ -1,0 +1,15 @@
+import-native:
+    resource: route-native.yml
+    prefix:
+      en: /native
+      es: /
+      fr: /
+    type:     trans
+
+import-trans:
+    resource: route-trans.yml
+    prefix:
+      en: /
+      es: /traducida
+      fr: /
+    type:     trans

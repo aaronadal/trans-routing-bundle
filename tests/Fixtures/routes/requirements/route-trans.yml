@@ -1,0 +1,9 @@
+route_trans:
+  path: /bar
+  requirements:
+    en:
+      one: one
+    es:
+      one: uno
+    fr:
+      one: un

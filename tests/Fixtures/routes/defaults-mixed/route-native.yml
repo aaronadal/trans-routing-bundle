@@ -1,0 +1,7 @@
+route_native:
+    path: /foo
+    defaults:
+      en: []
+      es: []
+      fr:
+        foo: bar

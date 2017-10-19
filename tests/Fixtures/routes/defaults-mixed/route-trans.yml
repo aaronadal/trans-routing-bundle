@@ -1,0 +1,7 @@
+route_trans:
+    path: /bar
+    defaults:
+      en:
+        bar: baz
+      es: []
+      fr: []
