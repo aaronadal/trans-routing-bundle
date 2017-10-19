@@ -1,8 +1,17 @@
 services:
     aaronadal.trans_router.route_loader:
-      class: Aaronadal\TransRoutingBundle\Router\TransYmlRouteLoader
-      arguments:
-        - '@file_locator'
-        - '%aaronadal.trans_routing.allowed_locales%'
-      tags:
-        - 'routing.loader'
+        class: Aaronadal\TransRoutingBundle\Router\TransYmlRouteLoader
+        arguments:
+            - '@file_locator'
+            - '%aaronadal.trans_routing.allowed_locales%'
+        tags:
+            - 'routing.loader'
+
+    aaronadal.trans_router:
+        class: Aaronadal\TransRoutingBundle\Router\TransRouter
+        decorates: router
+        decoration_priority: 128
+        public: false
+        arguments:
+            - '@aaronadal.trans_router.inner'
+            - '@request_stack'
