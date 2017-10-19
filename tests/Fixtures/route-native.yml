@@ -1,0 +1,5 @@
+route_native:
+  path: /foo
+  methods:
+    - GET
+  defaults: { one: one }

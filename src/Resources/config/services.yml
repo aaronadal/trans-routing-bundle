@@ -1,1 +1,8 @@
-services: ~
+services:
+    aaronadal.trans_router.route_loader:
+      class: Aaronadal\TransRoutingBundle\Router\TransYmlRouteLoader
+      arguments:
+        - '@file_locator'
+        - '%aaronadal.trans_routing.allowed_locales%'
+      tags:
+        - 'routing.loader'

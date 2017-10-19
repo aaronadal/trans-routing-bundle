@@ -8,7 +8,7 @@
          bootstrap="vendor/autoload.php"
 >
     <testsuites>
-        <testsuite name="Aaronadal Trans Routing Test Suite">
+        <testsuite name="Aaronadal Trans Routing Bundle Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
